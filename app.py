@@ -19,7 +19,7 @@ load_dotenv()
 
 # Configure the page
 st.set_page_config(
-    page_title="Advanced Tomato Disease Detection",
+    page_title="Advanced Tomato Plant Disease Detection",
     page_icon="🍅",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -669,7 +669,7 @@ def display_agent_results(results: Dict[str, Any]):
             )
 
 def main():
-    st.title("🍅 Tomato Disease Detection System")
+    st.title("🍅 Advanced Tomato Plant Disease Detection")
     st.markdown("**Powered by OpenAI and Specialized AI Agents**")
     
     st.info("""
