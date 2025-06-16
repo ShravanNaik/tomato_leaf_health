@@ -7,6 +7,11 @@ import json
 from datetime import datetime
 import pandas as pd
 from typing import Dict, Any, List
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure the page
 st.set_page_config(
@@ -640,8 +645,8 @@ def display_agent_results(results: Dict[str, Any]):
             )
 
 def main():
-    st.title("🍅 Advanced Multi-Agent Tomato Disease Detection System")
-    st.markdown("**Powered by OpenAI GPT-4o and Specialized AI Agents**")
+    st.title("🍅 Tomato Disease Detection System")
+    st.markdown("**Powered by OpenAI and Specialized AI Agents**")
     
     st.info("""
     🤖 **Five Specialized AI Agents Working Together:**
@@ -652,26 +657,32 @@ def main():
     - **Treatment Coordinator**: Provides integrated management strategies
     """)
     
-    # Sidebar configuration
-    st.sidebar.header("🔧 Configuration")
-    api_key = st.sidebar.text_input(
-        "OpenAI API Key", 
-        type="password", 
-        help="Enter your OpenAI API key for GPT-4o access"
-    )
+    # Get API key from environment variable
+    api_key = os.getenv("OPENAI_API_KEY")
     
     if not api_key:
-        st.warning("⚠️ Please enter your OpenAI API key in the sidebar")
-        st.info("""
-        **How to get OpenAI API Key:**
-        1. Visit https://platform.openai.com/
-        2. Create account and navigate to API Keys
-        3. Generate new API key
-        4. Paste it in the sidebar
+        st.error("❌ OpenAI API key not found!")
+        st.warning("""
+        **Please set up your OpenAI API key:**
         
-        **Note**: This system uses GPT-4o vision model for advanced analysis
+        1. Create a `.env` file in the same directory as this app
+        2. Add the following line to the `.env` file:
+        ```
+        OPENAI_API_KEY=your_api_key_here
+        ```
+        3. Replace `your_api_key_here` with your actual OpenAI API key
+        4. Restart the Streamlit app
+        
+        **How to get OpenAI API Key:**
+        - Visit https://platform.openai.com/
+        - Create account and navigate to API Keys
+        - Generate new API key
+        - Copy and paste it in the .env file
         """)
         return
+    
+    # Display API key status (masked for security)
+    st.sidebar.success(f"🔑 API Key Loaded: {'*' * 20}{api_key[-4:]}")
     
     # Initialize agent manager
     agent_manager = TomatoAnalysisAgent(api_key)
@@ -739,8 +750,7 @@ def main():
             st.markdown("---")
             display_agent_results(st.session_state['analysis_results'])
     
-    # Sidebar information
-    st.sidebar.markdown("---")
+    # Sidebar information (removed configuration section)
     st.sidebar.header("🧠 AI Agent Capabilities")
     
     with st.sidebar.expander("🦠 Plant Pathology Agent"):
@@ -847,9 +857,7 @@ def main():
     st.markdown("---")
     st.markdown("""
     <div style='text-align: center; color: gray;'>
-    <p>🍅 Advanced Multi-Agent Tomato Disease Detection System</p>
-    <p>Powered by OpenAI GPT-4o Vision • Built with Streamlit</p>
-    <p>For research and educational purposes</p>
+    <p>🍅 Tomato Disease Detection System</p>
     </div>
     """, unsafe_allow_html=True)
 
